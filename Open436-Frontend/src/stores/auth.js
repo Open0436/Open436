@@ -23,32 +23,42 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function register(username, password, nicknameVal = '') {
-    const res = await request.post('/api/v1/auth/register', {
-      username,
-      password,
-      nickname: nicknameVal || username
-    })
-    if (res.code !== 200) {
-      return { success: false, message: res.message || '注册失败' }
+    try {
+      const res = await request.post('/api/auth/register', {
+        username,
+        password,
+        nickname: nicknameVal || username
+      })
+      if (res.code !== 200) {
+        return { success: false, message: res.message || '注册失败' }
+      }
+      // 注册成功后自动登录
+      return await login(username, password)
+    } catch (e) {
+      const msg = e?.response?.data?.message
+      return { success: false, message: msg || e?.message || '注册失败' }
     }
-    // 注册成功后自动登录
-    return await login(username, password)
   }
 
   async function login(username, password) {
-    const res = await request.post('/api/v1/auth/login', { username, password })
-    if (res.code !== 200 || !res.data?.token) {
-      return { success: false, message: res.message || '登录失败' }
+    try {
+      const res = await request.post('/api/auth/login', { username, password })
+      if (res.code !== 200 || !res.data?.token) {
+        return { success: false, message: res.message || '登录失败' }
+      }
+      setToken(res.data.token)
+      setUser(res.data.user)
+      return { success: true }
+    } catch (e) {
+      const msg = e?.response?.data?.message
+      return { success: false, message: msg || e?.message || '登录失败' }
     }
-    setToken(res.data.token)
-    setUser(res.data.user)
-    return { success: true }
   }
 
   async function fetchUser() {
     if (!token.value) return false
     try {
-      const res = await request.get('/api/v1/auth/me')
+      const res = await request.get('/api/auth/current')
       if (res.code === 200 && res.data?.user) {
         setUser(res.data.user)
         return true

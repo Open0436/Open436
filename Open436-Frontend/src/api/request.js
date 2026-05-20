@@ -6,7 +6,7 @@ import axios from 'axios'
 
 // 创建 axios 实例
 const request = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json'
@@ -18,7 +18,7 @@ request.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('open436_token')
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`
+      config.headers['token'] = token
     }
     return config
   },

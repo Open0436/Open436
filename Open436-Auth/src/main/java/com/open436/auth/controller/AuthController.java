@@ -6,6 +6,7 @@ import com.open436.auth.dto.*;
 import com.open436.auth.enums.TokenConstants;
 import com.open436.auth.service.AuthService;
 import com.open436.auth.service.RoleService;
+import com.open436.auth.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,39 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     
     private final AuthService authService;
+    private final UserService userService;
     private final RoleService roleService;
     
+    /**
+     * 用户注册
+     */
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse<LoginResponse>> register(
+            @Valid @RequestBody RegisterRequest request) {
+
+        log.info("注册请求: username={}", request.getUsername());
+
+        // 1. 创建用户（默认 role=user）
+        CreateUserRequest createRequest = new CreateUserRequest();
+        createRequest.setUsername(request.getUsername());
+        createRequest.setPassword(request.getPassword());
+        createRequest.setRole("user");
+        userService.createUser(createRequest);
+
+        // 2. 自动登录
+        LoginResponse response = authService.login(
+                new LoginRequest(request.getUsername(), request.getPassword(), false));
+
+        return ResponseEntity.ok(
+            ApiResponse.<LoginResponse>builder()
+                .code(200)
+                .message("注册成功")
+                .data(response)
+                .timestamp(System.currentTimeMillis())
+                .build()
+        );
+    }
+
     /**
      * 用户登录
      */

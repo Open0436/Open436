@@ -4,7 +4,7 @@
       <div class="brand"><div class="brand-icon">O</div><span>Open436</span></div>
       <div class="hero-title">
         <code class="code-line">
-          <span class="token-class">System</span><span class="token-dot">.</span><span class="token-method">out</span><span class="token-dot">.</span><span class="token-method">print</span><span class="token-paren">(</span><span class="token-string">"Hello 36!"</span><span class="token-paren">)</span><span class="token-semicolon">;</span><span class="cursor">|</span>
+          <span class="token-class">System</span><span class="token-dot">.</span><span class="token-method">out</span><span class="token-dot">.</span><span class="token-method">print</span><span class="token-paren">(</span><span class="token-string">"hello 0436!"</span><span class="token-paren">)</span><span class="token-semicolon">;</span><span class="cursor">|</span>
         </code>
       </div>
       <div class="characters">
@@ -36,17 +36,47 @@
           </div>
         </div>
       </div>
-            <div class="bg-grid"/><div class="bg-orb o1"/><div class="bg-orb o2"/><div class="bg-orb o3"/>
+<div class="floating-letters">
+        <div class="fleaf java">Java</div>
+        <div class="fleaf spring">Spring</div>
+        <div class="fleaf springboot">SpringBoot</div>
+        <div class="fleaf springcloud">SpringCloud</div>
+        <div class="fleaf mybatis">MyBatis</div>
+        <div class="fleaf maven">Maven</div>
+        <div class="fleaf mysql">MySQL</div>
+        <div class="fleaf redis">Redis</div>
+        <div class="fleaf rabbitmq">RabbitMQ</div>
+        <div class="fleaf jvm">JVM</div>
+        <div class="fleaf hashmap">HashMap</div>
+        <div class="fleaf arraylist">ArrayList</div>
+        <div class="fleaf git">Git</div>
+        <div class="fleaf docker">Docker</div>
+        <div class="fleaf restful">RESTful</div>
+        <div class="fleaf api">API</div>
+        <div class="fleaf service">Service</div>
+        <div class="fleaf mapper">Mapper</div>
+        <div class="fleaf dto">DTO</div>
+        <div class="fleaf linux">Linux</div>
+        <div class="fleaf html">HTML</div>
+        <div class="fleaf css">CSS</div>
+        <div class="fleaf javascript">JavaScript</div>
+        <div class="fleaf react">React</div>
+        <div class="fleaf vue">Vue</div>
+        <div class="fleaf angular">Angular</div>
+        <div class="fleaf nodejs">Node.js</div>
+        <div class="fleaf webpack">Webpack</div>
+      </div>
+      <div class="bg-grid"/><div class="bg-orb o1"/><div class="bg-orb o2"/><div class="bg-orb o3"/>
     </div>
     <div class="auth-right">
       <div class="mobile-brand"><div class="brand-icon">O</div><span>Open436</span></div>
       <div class="form-box">
         <div class="form-header"><h1>{{ isR ? '创建账号' : '欢迎回来！' }}</h1><p>{{ isR ? '填写信息加入 Open436' : '请输入你的账号信息' }}</p></div>
         <form @submit.prevent="onSubmit" class="auth-form">
-          <div class="form-group"><label>用户名</label><input ref="uRef" v-model="f.u" type="text" placeholder="3-20 位" required @focus="onTextFocus" @blur="onBlur"/></div>
+          <div class="form-group"><label>用户名</label><input ref="uRef" v-model="f.u" type="text" placeholder="3-20 位" autocomplete="username" required @focus="onTextFocus" @blur="onBlur"/></div>
           <div v-if="isR" class="form-group"><label>昵称</label><input ref="nRef" v-model="f.n" type="text" placeholder="显示名称（可选）" @focus="onTextFocus" @blur="onBlur"/></div>
-          <div class="form-group"><label>密码</label><div class="password-wrap"><input ref="pRef" v-model="f.p" :type="showP ? 'text' : 'password'" placeholder="至少 6 位" required @focus="onPasswordFocus" @blur="onBlur"/><button type="button" class="eye-btn" @click="showP = !showP"><svg v-if="showP" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="1" y1="1" x2="23" y2="23"/></svg><svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
-          <div v-if="isR" class="form-group"><label>确认密码</label><div class="password-wrap"><input ref="cpRef" v-model="f.cp" :type="showP ? 'text' : 'password'" placeholder="再次输入密码" required @focus="onPasswordFocus" @blur="onBlur"/></div></div>
+          <div class="form-group"><label>密码</label><div class="password-wrap"><input ref="pRef" v-model="f.p" :type="showP ? 'text' : 'password'" placeholder="至少 6 位" autocomplete="current-password" required @focus="onPasswordFocus" @blur="onBlur"/><button type="button" class="eye-btn" @click="showP = !showP"><svg v-if="showP" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="1" y1="1" x2="23" y2="23"/></svg><svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+          <div v-if="isR" class="form-group"><label>确认密码</label><div class="password-wrap"><input ref="cpRef" v-model="f.cp" :type="showP ? 'text' : 'password'" placeholder="再次输入密码" autocomplete="new-password" required @focus="onPasswordFocus" @blur="onBlur"/></div></div>
           <div v-if="!isR" class="form-options"><label class="remember"><input type="checkbox" v-model="f.r"/><span>记住我</span></label><a href="#" class="forgot">忘记密码？</a></div>
           <div v-if="err" class="error-msg">{{ err }}</div>
           <button type="submit" class="submit-btn" :disabled="ld"><span v-if="ld" class="spinner"/>{{ ld ? (isR ? '注册中...' : '登录中...') : (isR ? '注册' : '登录') }}</button>
@@ -171,23 +201,31 @@ function onBlur() {
 function toggle() {
   isR.value = !isR.value; err.value = ''
   Object.assign(f, { u: '', n: '', p: '', cp: '', r: false })
+  showP.value = false
   focusedType.value = null
 }
 
 async function onSubmit() {
   err.value = ''
+  // 直接从 DOM 读取最新值，避免浏览器自动填充导致 v-model 不同步
+  const username = uRef.value?.value || f.u
+  const password = pRef.value?.value || f.p
+  const nickname = nRef.value?.value || f.n
+  const confirmPassword = cpRef.value?.value || f.cp
   if (isR.value) {
-    if (f.p !== f.cp) { err.value = '两次密码不一致'; return }
-    if (f.u.length < 3 || f.u.length > 20) { err.value = '用户名 3-20 位'; return }
-    if (f.p.length < 6) { err.value = '密码至少 6 位'; return }
+    if (password !== confirmPassword) { err.value = '两次密码不一致'; return }
+    if (username.length < 3 || username.length > 20) { err.value = '用户名 3-20 位'; return }
+    if (password.length < 6) { err.value = '密码至少 6 位'; return }
   }
   ld.value = true
   try {
-    const r = isR.value ? await auth.register(f.u, f.p, f.n) : await auth.login(f.u, f.p)
+    const r = isR.value ? await auth.register(username, password, nickname) : await auth.login(username, password)
     if (r.success) { ui.showToast(isR.value ? '注册成功！' : '登录成功！', 'success'); router.push(R.query.redirect || '/') }
     else err.value = r.message || (isR.value ? '注册失败' : '登录失败')
-  } catch (e) { err.value = e?.message || (isR.value ? '注册失败' : '登录失败') }
-  finally { ld.value = false }
+  } catch (e) {
+    const serverMsg = e?.response?.data?.message
+    err.value = serverMsg || e?.message || (isR.value ? '注册失败' : '登录失败')
+  } finally { ld.value = false }
 }
 </script>
 

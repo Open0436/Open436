@@ -9,7 +9,7 @@
 .brand-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),#8b5cf6);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 20px var(--accent-glow)}
 
 .hero-title{position:relative;z-index:10;margin-top:20px;margin-left:4px;animation:slideDown .8s .15s cubic-bezier(.22,1,.36,1) both}
-.code-line{font-family:'Fira Code','JetBrains Mono','Noto Sans SC',monospace;font-size:18px;font-weight:500;letter-spacing:.5px}
+.code-line{font-family:'Fira Code','JetBrains Mono','Noto Sans SC',monospace;font-size:clamp(20px,2.5vw,32px);font-weight:500;letter-spacing:.5px}
 .token-class{color:#c084fc;text-shadow:0 0 12px rgba(192,132,252,.4)}
 .token-method{color:#f472b6;text-shadow:0 0 12px rgba(244,114,182,.35)}
 .token-string{color:#fde047;text-shadow:0 0 12px rgba(253,224,71,.35)}
@@ -68,7 +68,6 @@
 .bg-orb.o1{top:10%;left:10%;width:300px;height:300px;background:var(--accent-glow);animation:float 8s ease-in-out infinite}
 .bg-orb.o2{bottom:20%;right:5%;width:250px;height:250px;background:rgba(245,158,11,0.2);animation:float 10s ease-in-out infinite reverse}
 .bg-orb.o3{top:50%;left:40%;width:200px;height:200px;background:rgba(236,72,153,0.15);animation:float 12s ease-in-out infinite 2s}
-
 .auth-right{flex:3;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;background:linear-gradient(180deg,#0f172a 0%,var(--navy) 100%)}
 @media(min-width:1024px){.auth-right{background:transparent}}
 
@@ -130,4 +129,37 @@
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-20px)}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+
+/* ---------- 浮叶字母 ---------- */
+.floating-letters{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;font-family:'JetBrains Mono','Fira Code',monospace}
+.fleaf{position:absolute;font-size:clamp(12px,1.6vw,20px);font-weight:600;opacity:.09;text-shadow:0 0 14px currentColor;white-space:nowrap;will-change:transform;animation:leafFloat ease-in-out infinite}
+.fleaf.java{color:#f89820;top:8%;left:5%;animation-duration:24s;animation-delay:0s}
+.fleaf.spring{color:#6db33f;top:12%;left:35%;animation-duration:28s;animation-delay:1.5s}
+.fleaf.springboot{color:#6db33f;top:18%;left:60%;animation-duration:22s;animation-delay:3s}
+.fleaf.springcloud{color:#00d4aa;top:25%;left:15%;animation-duration:26s;animation-delay:.5s}
+.fleaf.mybatis{color:#d53c2e;top:30%;left:45%;animation-duration:20s;animation-delay:2s}
+.fleaf.maven{color:#c71a36;top:38%;left:70%;animation-duration:30s;animation-delay:4s}
+.fleaf.mysql{color:#00758f;top:42%;left:8%;animation-duration:23s;animation-delay:1s}
+.fleaf.redis{color:#dc382d;top:48%;left:55%;animation-duration:27s;animation-delay:5s}
+.fleaf.rabbitmq{color:#ff6600;top:55%;left:25%;animation-duration:21s;animation-delay:2.5s}
+.fleaf.jvm{color:#5382a1;top:62%;left:50%;animation-duration:25s;animation-delay:0s}
+.fleaf.hashmap{color:#c084fc;top:68%;left:75%;animation-duration:29s;animation-delay:3.5s}
+.fleaf.arraylist{color:#f472b6;top:75%;left:10%;animation-duration:24s;animation-delay:6s}
+.fleaf.git{color:#f05033;top:80%;left:40%;animation-duration:26s;animation-delay:1s}
+.fleaf.docker{color:#2496ed;top:85%;left:65%;animation-duration:22s;animation-delay:4.5s}
+.fleaf.restful{color:#94a3b8;top:15%;left:80%;animation-duration:28s;animation-delay:2s}
+.fleaf.api{color:#22c55e;top:22%;left:5%;animation-duration:20s;animation-delay:0s}
+.fleaf.service{color:#06b6d4;top:35%;left:30%;animation-duration:25s;animation-delay:5s}
+.fleaf.mapper{color:#eab308;top:50%;left:75%;animation-duration:23s;animation-delay:3s}
+.fleaf.dto{color:#ec4899;top:60%;left:15%;animation-duration:27s;animation-delay:1.5s}
+.fleaf.linux{color:#fcc624;top:70%;left:55%;animation-duration:21s;animation-delay:4s}
+.fleaf.html{color:#e34f26;top:5%;left:20%;animation-duration:25s;animation-delay:.8s}
+.fleaf.css{color:#1572b6;top:14%;left:50%;animation-duration:29s;animation-delay:2.2s}
+.fleaf.javascript{color:#f7df1e;top:28%;left:78%;animation-duration:23s;animation-delay:3.8s}
+.fleaf.react{color:#61dafb;top:40%;left:5%;animation-duration:27s;animation-delay:5.5s}
+.fleaf.vue{color:#4fc08d;top:45%;left:85%;animation-duration:24s;animation-delay:1.2s}
+.fleaf.angular{color:#dd0031;top:52%;left:40%;animation-duration:30s;animation-delay:4.2s}
+.fleaf.nodejs{color:#339933;top:65%;left:88%;animation-duration:22s;animation-delay:.3s}
+.fleaf.webpack{color:#8dd6f9;top:78%;left:30%;animation-duration:26s;animation-delay:3s}
+@keyframes leafFloat{0%,100%{transform:translate(0,0) rotate(-5deg)}25%{transform:translate(25px,-35px) rotate(8deg)}50%{transform:translate(-20px,-55px) rotate(-10deg)}75%{transform:translate(30px,-25px) rotate(6deg)}}
 

@@ -20,7 +20,7 @@ export default defineConfig({
     // 代理配置（可选，直接使用 Kong 网关时可不配置）
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'http://localhost:8081',
         changeOrigin: true
       }
     }
