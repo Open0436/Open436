@@ -1,13 +1,19 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+  <router-view />
+  <ToastNotification />
 </template>
 
 <script setup>
-// 应用根组件
-</script>
+import { onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import ToastNotification from '@/components/ToastNotification.vue'
 
-<style>
-/* 全局样式已在 main.css 中定义 */
-</style>
+const auth = useAuthStore()
+
+onMounted(() => {
+  // 页面刷新时尝试恢复登录态
+  if (auth.token && !auth.user) {
+    auth.fetchUser()
+  }
+})
+</script>

@@ -1,73 +1,65 @@
-/**
- * Vue Router 配置
- */
 import { createRouter, createWebHistory } from 'vue-router'
+import { storage } from '@/utils/storage'
 
-// 路由配置
 const routes = [
+  { path: '/', name: 'Home', component: () => import('@/views/Home.vue'), meta: { title: '首页' } },
+  { path: '/login', name: 'Login', component: () => import('@/views/Login.vue'), meta: { title: '登录' } },
+  { path: '/register', name: 'Register', component: () => import('@/views/Register.vue'), meta: { title: '注册' } },
+  { path: '/post/:id', name: 'PostDetail', component: () => import('@/views/PostDetail.vue'), meta: { title: '帖子详情' } },
+  { path: '/post/new', name: 'PostNew', component: () => import('@/views/PostNew.vue'), meta: { title: '发布新帖', auth: true } },
+  { path: '/profile/:id?', name: 'Profile', component: () => import('@/views/Profile.vue'), meta: { title: '个人主页' } },
+  { path: '/profile/edit', name: 'ProfileEdit', component: () => import('@/views/ProfileEdit.vue'), meta: { title: '编辑资料', auth: true } },
+  { path: '/favorites', name: 'Favorites', component: () => import('@/views/Favorites.vue'), meta: { title: '我的收藏', auth: true } },
+  { path: '/search', name: 'Search', component: () => import('@/views/Search.vue'), meta: { title: '搜索' } },
+  { path: '/quiz', name: 'Quiz', component: () => import('@/views/Quiz.vue'), meta: { title: '算法' } },
+  { path: '/enroll', name: 'Enroll', component: () => import('@/views/Enroll.vue'), meta: { title: '纳新' } },
+  { path: '/mine', name: 'Mine', component: () => import('@/views/Mine.vue'), meta: { title: '我的', auth: true } },
+  { path: '/password/change', name: 'PasswordChange', component: () => import('@/views/PasswordChange.vue'), meta: { title: '修改密码', auth: true } },
   {
-    path: '/',
-    name: 'Home',
-    component: () => import('@/views/Home.vue'),
-    meta: {
-      title: '首页',
-      requiresAuth: false
-    }
-  }
-  // TODO: 添加更多路由配置
-  // 示例：
-  // {
-  //   path: '/login',
-  //   name: 'Login',
-  //   component: () => import('@/views/Login.vue'),
-  //   meta: { title: '登录', requiresAuth: false }
-  // },
-  // {
-  //   path: '/profile',
-  //   name: 'Profile',
-  //   component: () => import('@/views/Profile.vue'),
-  //   meta: { title: '个人中心', requiresAuth: true }
-  // }
+    path: '/admin',
+    name: 'AdminDashboard',
+    component: () => import('@/views/admin/Dashboard.vue'),
+    meta: { title: '管理后台', auth: true, admin: true }
+  },
+  { path: '/admin/users', name: 'AdminUsers', component: () => import('@/views/admin/Users.vue'), meta: { title: '用户管理', auth: true, admin: true } },
+  { path: '/admin/posts', name: 'AdminPosts', component: () => import('@/views/admin/Posts.vue'), meta: { title: '帖子管理', auth: true, admin: true } },
+  { path: '/admin/comments', name: 'AdminComments', component: () => import('@/views/admin/Comments.vue'), meta: { title: '评论管理', auth: true, admin: true } },
+  { path: '/admin/sections', name: 'AdminSections', component: () => import('@/views/admin/Sections.vue'), meta: { title: '板块管理', auth: true, admin: true } },
+  { path: '/admin/reports', name: 'AdminReports', component: () => import('@/views/admin/Reports.vue'), meta: { title: '举报管理', auth: true, admin: true } },
+  { path: '/admin/roles', name: 'AdminRoles', component: () => import('@/views/admin/Roles.vue'), meta: { title: '角色权限', auth: true, admin: true } },
+  { path: '/admin/settings', name: 'AdminSettings', component: () => import('@/views/admin/Settings.vue'), meta: { title: '系统设置', auth: true, admin: true } },
+  { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 
-// 创建路由实例
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  // 滚动行为
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { top: 0 }
-    }
-  }
+  scrollBehavior: () => ({ top: 0 })
 })
 
-// 全局前置守卫
 router.beforeEach((to, from, next) => {
-  // 设置页面标题
   if (to.meta.title) {
-    document.title = `${to.meta.title} - ${import.meta.env.VITE_APP_TITLE || 'Open436'}`
+    document.title = `${to.meta.title} - Open436`
   }
 
-  // TODO: 添加权限验证逻辑
-  // 示例：
-  // if (to.meta.requiresAuth) {
-  //   const token = storage.get('token')
-  //   if (!token) {
-  //     next({ name: 'Login', query: { redirect: to.fullPath } })
-  //     return
-  //   }
-  // }
+  const user = storage.get('user')
+
+  if (to.meta.auth && !user) {
+    next({ name: 'Login', query: { redirect: to.fullPath } })
+    return
+  }
+
+  if (to.meta.admin && user?.role !== 'admin') {
+    next({ name: 'Home' })
+    return
+  }
+
+  if (to.name === 'Login' && user) {
+    next({ name: 'Home' })
+    return
+  }
 
   next()
 })
 
-// 全局后置钩子
-router.afterEach(() => {
-  // TODO: 可以在这里添加页面访问统计等逻辑
-})
-
 export default router
-
