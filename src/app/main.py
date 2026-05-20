@@ -6,22 +6,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from src.config import settings
-from src.app.routes import sections
+from src.app.routes import sections, auth
 from src.app.models.database import engine, Base
+from src.app.models.user import User  # noqa: F401 - ensure user table is registered
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """应用生命周期管理"""
     # 启动时：创建数据库表
-    print("🚀 启动板块管理服务...")
+    print("[START] Launching Open436 service...")
     Base.metadata.create_all(bind=engine)
-    print("✅ 数据库表初始化完成")
-    
+    print("[OK] Database tables initialized")
+
     yield
-    
+
     # 关闭时：清理资源
-    print("👋 关闭板块管理服务...")
+    print("[STOP] Shutting down Open436 service...")
 
 
 # 创建FastAPI应用实例
@@ -46,6 +47,11 @@ app.include_router(
     sections.router,
     prefix=f"{settings.API_PREFIX}/sections",
     tags=["板块管理"]
+)
+app.include_router(
+    auth.router,
+    prefix=f"{settings.API_PREFIX}/auth",
+    tags=["认证授权"]
 )
 
 

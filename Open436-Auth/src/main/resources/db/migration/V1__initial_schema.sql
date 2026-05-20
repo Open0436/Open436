@@ -148,5 +148,5 @@ CREATE INDEX idx_role_permissions_permission_id ON role_permissions(permission_i
 -- ============================================
 -- 完成
 -- ============================================
-COMMENT ON DATABASE current_database() IS 'Open436 认证授权服务数据库';
+COMMENT ON DATABASE open436 IS 'Open436 认证授权服务数据库';
 

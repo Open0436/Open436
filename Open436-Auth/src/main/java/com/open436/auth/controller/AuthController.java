@@ -47,6 +47,39 @@ public class AuthController {
     }
     
     /**
+     * 管理端登录（仅允许 admin 角色）
+     */
+    @PostMapping("/admin/login")
+    public ResponseEntity<ApiResponse<LoginResponse>> adminLogin(
+            @Valid @RequestBody LoginRequest request) {
+
+        log.info("管理端登录请求: username={}", request.getUsername());
+
+        LoginResponse response = authService.login(request);
+
+        // 校验角色必须是 admin
+        if (!"admin".equals(response.getUser().getRole())) {
+            log.warn("管理端登录拒绝: username={}, role={}", request.getUsername(), response.getUser().getRole());
+            return ResponseEntity.status(403).body(
+                ApiResponse.<LoginResponse>builder()
+                    .code(403)
+                    .message("无管理员权限")
+                    .timestamp(System.currentTimeMillis())
+                    .build()
+            );
+        }
+
+        return ResponseEntity.ok(
+            ApiResponse.<LoginResponse>builder()
+                .code(200)
+                .message("登录成功")
+                .data(response)
+                .timestamp(System.currentTimeMillis())
+                .build()
+        );
+    }
+
+    /**
      * 用户登出
      */
     @PostMapping("/logout")

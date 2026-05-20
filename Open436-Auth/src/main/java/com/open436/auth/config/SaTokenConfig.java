@@ -33,6 +33,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
             .addPathPatterns("/**")
             .excludePathPatterns(
                 "/api/auth/login",      // 登录接口
+                "/api/auth/admin/login",// 管理端登录接口
                 "/error"                // 错误页面
             );
     }

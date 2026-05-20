@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     """应用配置类"""
     
     # 数据库配置
-    DATABASE_URL: str = "postgresql://open436:open436_password@localhost:55432/open436"
+    DATABASE_URL: str = "postgresql://open436:open436@localhost:55432/open436"
     
     # API配置
     API_PREFIX: str = "/api/v1"
@@ -26,8 +26,9 @@ class Settings(BaseSettings):
     
     # 认证配置（与M1用户服务对接）
     AUTH_SERVICE_URL: str = "http://localhost:8001"
-    JWT_SECRET_KEY: str = "your-secret-key-here"
+    JWT_SECRET_KEY: str = "open436-dev-secret-key-change-in-production"
     JWT_ALGORITHM: str = "HS256"
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7天
     
     # 文件服务配置（与M7文件服务对接）
     FILE_SERVICE_URL: str = "http://localhost:8007"
