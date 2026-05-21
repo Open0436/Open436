@@ -33,10 +33,18 @@ public interface UserAuthRepository extends JpaRepository<UserAuth, Long> {
     
     /**
      * 根据状态查询用户列表（带角色信息）
-     * @param status 账号状态（active/disabled）
+     * @param status 账号状态（active/disabled/pending）
      * @return 用户列表
      */
     @EntityGraph(attributePaths = {"roles"})
     List<UserAuth> findByStatus(String status);
+
+    /**
+     * 查询所有用户（带角色信息，避免N+1）
+     * @return 用户列表
+     */
+    @Override
+    @EntityGraph(attributePaths = {"roles"})
+    List<UserAuth> findAll();
 }
 

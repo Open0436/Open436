@@ -15,19 +15,6 @@ const routes = [
   { path: '/enroll', name: 'Enroll', component: () => import('@/views/Enroll.vue'), meta: { title: '纳新' } },
   { path: '/mine', name: 'Mine', component: () => import('@/views/Mine.vue'), meta: { title: '我的', auth: true } },
   { path: '/password/change', name: 'PasswordChange', component: () => import('@/views/PasswordChange.vue'), meta: { title: '修改密码', auth: true } },
-  {
-    path: '/admin',
-    name: 'AdminDashboard',
-    component: () => import('@/views/admin/Dashboard.vue'),
-    meta: { title: '管理后台', auth: true, admin: true }
-  },
-  { path: '/admin/users', name: 'AdminUsers', component: () => import('@/views/admin/Users.vue'), meta: { title: '用户管理', auth: true, admin: true } },
-  { path: '/admin/posts', name: 'AdminPosts', component: () => import('@/views/admin/Posts.vue'), meta: { title: '帖子管理', auth: true, admin: true } },
-  { path: '/admin/comments', name: 'AdminComments', component: () => import('@/views/admin/Comments.vue'), meta: { title: '评论管理', auth: true, admin: true } },
-  { path: '/admin/sections', name: 'AdminSections', component: () => import('@/views/admin/Sections.vue'), meta: { title: '板块管理', auth: true, admin: true } },
-  { path: '/admin/reports', name: 'AdminReports', component: () => import('@/views/admin/Reports.vue'), meta: { title: '举报管理', auth: true, admin: true } },
-  { path: '/admin/roles', name: 'AdminRoles', component: () => import('@/views/admin/Roles.vue'), meta: { title: '角色权限', auth: true, admin: true } },
-  { path: '/admin/settings', name: 'AdminSettings', component: () => import('@/views/admin/Settings.vue'), meta: { title: '系统设置', auth: true, admin: true } },
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 
@@ -46,11 +33,6 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.auth && !user) {
     next({ name: 'Login', query: { redirect: to.fullPath } })
-    return
-  }
-
-  if (to.meta.admin && user?.role !== 'admin') {
-    next({ name: 'Home' })
     return
   }
 

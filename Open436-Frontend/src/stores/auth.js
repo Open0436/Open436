@@ -32,8 +32,8 @@ export const useAuthStore = defineStore('auth', () => {
       if (res.code !== 200) {
         return { success: false, message: res.message || '注册失败' }
       }
-      // 注册成功后自动登录
-      return await login(username, password)
+      // 注册成功，pending 用户需管理员审核后才能登录
+      return { success: true, message: res.message || '注册成功，请等待管理员审核' }
     } catch (e) {
       const msg = e?.response?.data?.message
       return { success: false, message: msg || e?.message || '注册失败' }

@@ -33,6 +33,11 @@ public class CreateUserRequest {
      */
     @NotBlank(message = "角色不能为空")
     private String role = "user";
+
+    /**
+     * 用户状态（pending/active/disabled）
+     */
+    private String status = "pending";
 }
 
 

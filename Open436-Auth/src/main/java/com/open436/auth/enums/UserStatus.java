@@ -9,10 +9,15 @@ import lombok.Getter;
 public enum UserStatus {
     
     /**
+     * 待审核（新注册用户默认状态）
+     */
+    PENDING("pending", "待审核"),
+
+    /**
      * 正常
      */
     ACTIVE("active", "正常"),
-    
+
     /**
      * 禁用
      */

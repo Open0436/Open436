@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 用户管理控制器
  * 处理用户管理相关请求
@@ -23,6 +25,25 @@ public class UserController {
     
     private final UserService userService;
     
+    /**
+     * 获取用户列表（管理员功能）
+     */
+    @GetMapping
+    @SaCheckRole("admin")
+    public ResponseEntity<ApiResponse<List<UserInfoResponse>>> getUserList(
+            @RequestParam(required = false) String status) {
+        log.info("获取用户列表请求: status={}", status);
+        List<UserInfoResponse> users = userService.getUserList(status);
+        return ResponseEntity.ok(
+            ApiResponse.<List<UserInfoResponse>>builder()
+                .code(200)
+                .message("获取成功")
+                .data(users)
+                .timestamp(System.currentTimeMillis())
+                .build()
+        );
+    }
+
     /**
      * 创建用户（管理员功能）
      */

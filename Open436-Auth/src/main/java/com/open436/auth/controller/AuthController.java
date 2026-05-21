@@ -28,30 +28,26 @@ public class AuthController {
     private final RoleService roleService;
     
     /**
-     * 用户注册
+     * 用户注册（新用户默认 pending，需管理员审核后登录）
      */
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<LoginResponse>> register(
+    public ResponseEntity<ApiResponse<Void>> register(
             @Valid @RequestBody RegisterRequest request) {
 
         log.info("注册请求: username={}", request.getUsername());
 
-        // 1. 创建用户（默认 role=user）
+        // 创建用户（默认 role=user, status=pending）
         CreateUserRequest createRequest = new CreateUserRequest();
         createRequest.setUsername(request.getUsername());
         createRequest.setPassword(request.getPassword());
         createRequest.setRole("user");
+        createRequest.setStatus("pending");
         userService.createUser(createRequest);
 
-        // 2. 自动登录
-        LoginResponse response = authService.login(
-                new LoginRequest(request.getUsername(), request.getPassword(), false));
-
         return ResponseEntity.ok(
-            ApiResponse.<LoginResponse>builder()
+            ApiResponse.<Void>builder()
                 .code(200)
-                .message("注册成功")
-                .data(response)
+                .message("注册成功，请等待管理员审核")
                 .timestamp(System.currentTimeMillis())
                 .build()
         );

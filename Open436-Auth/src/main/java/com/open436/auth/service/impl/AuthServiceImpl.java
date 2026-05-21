@@ -76,6 +76,10 @@ public class AuthServiceImpl implements AuthService {
             });
         
         // 2. 检查账号状态
+        if (UserStatus.PENDING.getCode().equals(user.getStatus())) {
+            log.warn("登录失败: 账号待审核 - {}", request.getUsername());
+            throw new BusinessException(ErrorCode.ACCOUNT_PENDING);
+        }
         if (UserStatus.DISABLED.getCode().equals(user.getStatus())) {
             log.warn("登录失败: 账号已被禁用 - {}", request.getUsername());
             throw new BusinessException(ErrorCode.ACCOUNT_DISABLED);

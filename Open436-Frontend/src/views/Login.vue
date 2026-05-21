@@ -220,8 +220,15 @@ async function onSubmit() {
   ld.value = true
   try {
     const r = isR.value ? await auth.register(username, password, nickname) : await auth.login(username, password)
-    if (r.success) { ui.showToast(isR.value ? '注册成功！' : '登录成功！', 'success'); router.push(R.query.redirect || '/') }
-    else err.value = r.message || (isR.value ? '注册失败' : '登录失败')
+    if (r.success) {
+      if (isR.value) {
+        ui.showToast(r.message || '注册成功，请等待管理员审核', 'success')
+        toggle() // 切换到登录页
+      } else {
+        ui.showToast('登录成功！', 'success')
+        router.push(R.query.redirect || '/')
+      }
+    } else err.value = r.message || (isR.value ? '注册失败' : '登录失败')
   } catch (e) {
     const serverMsg = e?.response?.data?.message
     err.value = serverMsg || e?.message || (isR.value ? '注册失败' : '登录失败')

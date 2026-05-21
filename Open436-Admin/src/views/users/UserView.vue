@@ -10,6 +10,7 @@
         <el-option label="普通用户" value="user" />
       </el-select>
       <el-select v-model="statusFilter" placeholder="状态筛选" clearable style="width:140px" @change="handleSearch">
+        <el-option label="待审核" value="pending" />
         <el-option label="启用" value="active" />
         <el-option label="禁用" value="disabled" />
       </el-select>
@@ -36,20 +37,19 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="status" label="状态" width="100">
+      <el-table-column prop="status" label="状态" width="120">
         <template #default="{ row }">
-          <el-switch
-            :model-value="row.status === 'active'"
-            @change="(val) => handleToggleStatus(row, val)"
-            active-text="启用"
-            inactive-text="禁用"
-            inline-prompt
-          />
+          <el-tag v-if="row.status === 'pending'" type="warning" size="small">待审核</el-tag>
+          <el-tag v-else-if="row.status === 'active'" type="success" size="small">启用</el-tag>
+          <el-tag v-else type="info" size="small">禁用</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="createdAt" label="注册时间" width="180" />
-      <el-table-column label="操作" width="160" fixed="right">
+      <el-table-column label="操作" width="200" fixed="right">
         <template #default="{ row }">
+          <el-button v-if="row.status === 'pending'" type="success" link size="small" @click="handleApprove(row)">审核通过</el-button>
+          <el-button v-if="row.status === 'active'" type="danger" link size="small" @click="handleDisable(row)">禁用</el-button>
+          <el-button v-if="row.status === 'disabled'" type="primary" link size="small" @click="handleEnable(row)">启用</el-button>
           <el-button type="primary" link size="small" @click="handleResetPwd(row)">重置密码</el-button>
         </template>
       </el-table-column>
@@ -78,6 +78,13 @@
           <el-select v-model="createForm.role" style="width:100%">
             <el-option label="管理员" value="admin" />
             <el-option label="普通用户" value="user" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="createForm.status" style="width:100%">
+            <el-option label="待审核" value="pending" />
+            <el-option label="启用" value="active" />
+            <el-option label="禁用" value="disabled" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -123,7 +130,7 @@ const createFormRef = ref(null)
 const resetFormRef = ref(null)
 const resetTarget = ref(null)
 
-const createForm = reactive({ username: '', password: '', role: 'user' })
+const createForm = reactive({ username: '', password: '', role: 'user', status: 'pending' })
 const createRules = {
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }, { min: 3, max: 20, message: '3-20个字符', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }, { min: 6, max: 32, message: '6-32个字符', trigger: 'blur' }],
@@ -172,13 +179,30 @@ async function loadUsers() {
   }
 }
 
-async function handleToggleStatus(row, val) {
-  const status = val ? 'active' : 'disabled'
+async function handleApprove(row) {
   try {
-    await ElMessageBox.confirm(`确定${val ? '启用' : '禁用'}用户 ${row.username}？`, '提示', { type: 'warning' })
-    await updateUserStatus(row.id, { status })
-    row.status = status
-    ElMessage.success('操作成功')
+    await ElMessageBox.confirm(`确定通过用户 ${row.username} 的注册申请？`, '审核确认', { type: 'warning' })
+    await updateUserStatus(row.id, { status: 'active' })
+    row.status = 'active'
+    ElMessage.success('审核通过')
+  } catch {}
+}
+
+async function handleEnable(row) {
+  try {
+    await ElMessageBox.confirm(`确定启用用户 ${row.username}？`, '提示', { type: 'warning' })
+    await updateUserStatus(row.id, { status: 'active' })
+    row.status = 'active'
+    ElMessage.success('启用成功')
+  } catch {}
+}
+
+async function handleDisable(row) {
+  try {
+    await ElMessageBox.confirm(`确定禁用用户 ${row.username}？`, '提示', { type: 'warning' })
+    await updateUserStatus(row.id, { status: 'disabled' })
+    row.status = 'disabled'
+    ElMessage.success('禁用成功')
   } catch {}
 }
 
@@ -190,7 +214,7 @@ async function handleCreate() {
     await createUser(createForm)
     ElMessage.success('创建成功')
     showCreateDialog.value = false
-    Object.assign(createForm, { username: '', password: '', role: 'user' })
+    Object.assign(createForm, { username: '', password: '', role: 'user', status: 'pending' })
     loadUsers()
   } catch (e) {
     ElMessage.error(e?.message || '创建失败')

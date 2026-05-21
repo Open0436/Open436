@@ -20,6 +20,7 @@ public enum ErrorCode {
     // 401 认证错误
     INVALID_CREDENTIALS(40101001, HttpStatus.UNAUTHORIZED, "用户名或密码错误"),
     NOT_LOGGED_IN(40101002, HttpStatus.UNAUTHORIZED, "未登录，请先登录"),
+    ACCOUNT_PENDING(40102001, HttpStatus.UNAUTHORIZED, "账号待审核，请联系管理员"),
     WRONG_OLD_PASSWORD(40101004, HttpStatus.UNAUTHORIZED, "原密码错误"),
     
     // 403 权限错误

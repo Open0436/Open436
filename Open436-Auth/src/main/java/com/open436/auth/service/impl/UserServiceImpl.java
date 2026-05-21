@@ -20,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * 用户管理服务实现类
  */
@@ -59,7 +62,7 @@ public class UserServiceImpl implements UserService {
         UserAuth user = new UserAuth();
         user.setUsername(request.getUsername());
         user.setPasswordHash(passwordHash);
-        user.setStatus(UserStatus.ACTIVE.getCode());
+        user.setStatus(request.getStatus());
         user.getRoles().add(role);
         
         user = userAuthRepository.save(user);
@@ -77,7 +80,32 @@ public class UserServiceImpl implements UserService {
     }
     
     /**
-     * 启用/禁用用户（管理员功能）
+     * 获取用户列表（管理员功能）
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserInfoResponse> getUserList(String status) {
+        List<UserAuth> users;
+        if (status != null && !status.isEmpty()) {
+            users = userAuthRepository.findByStatus(status);
+        } else {
+            users = userAuthRepository.findAll();
+        }
+        // 在事务内完成映射，避免 LazyInitializationException
+        List<UserInfoResponse> result = new java.util.ArrayList<>();
+        for (UserAuth u : users) {
+            result.add(UserInfoResponse.builder()
+                .id(u.getId())
+                .username(u.getUsername())
+                .role(u.getPrimaryRoleCode())
+                .status(u.getStatus())
+                .build());
+        }
+        return result;
+    }
+
+    /**
+     * 启用/禁用/审核用户（管理员功能）
      */
     @Override
     @Transactional
@@ -96,8 +124,8 @@ public class UserServiceImpl implements UserService {
         permissionService.clearUserPermissionsCache(userId);
         roleService.clearUserRolesCache(userId);
         
-        // 4. 如果是禁用操作，踢出该用户
-        if (UserStatus.DISABLED.getCode().equals(status)) {
+        // 4. 如果是禁用或待审核操作，踢出该用户（强制重新登录）
+        if (UserStatus.DISABLED.getCode().equals(status) || UserStatus.PENDING.getCode().equals(status)) {
             StpUtil.kickout(userId);
             log.info("用户已被踢出: userId={}", userId);
         }

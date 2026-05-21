@@ -18,7 +18,7 @@ public class UpdateUserStatusRequest {
      * 状态（active/disabled）
      */
     @NotBlank(message = "状态不能为空")
-    @Pattern(regexp = "^(active|disabled)$", message = "状态只能是 active 或 disabled")
+    @Pattern(regexp = "^(pending|active|disabled)$", message = "状态只能是 pending、active 或 disabled")
     private String status;
 }
 

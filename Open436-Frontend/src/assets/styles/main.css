@@ -77,7 +77,6 @@ img { max-width: 100%; display: block; }
   --navbar-h: 64px;
   --tabbar-h: 48px;
   --sidebar-w: 260px;
-  --admin-sidebar-w: 260px;
   --mono: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
@@ -279,19 +278,3 @@ h6 { font-size: 14px; font-weight: 500; }
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* ---- Admin Layout ---- */
-.admin-layout {
-  display: flex; min-height: 100vh; padding-top: var(--navbar-h);
-}
-.admin-content {
-  flex: 1; margin-left: var(--admin-sidebar-w);
-  padding: var(--s-xl); max-width: 1200px;
-}
-.admin-header {
-  margin-bottom: var(--s-xl);
-}
-.admin-header h2 { font-size: 24px; font-weight: 600; }
-
-@media (max-width: 959px) {
-  .admin-content { margin-left: 0; padding: var(--s-base); }
-}
